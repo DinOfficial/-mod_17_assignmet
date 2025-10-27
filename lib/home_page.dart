@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 
 enum WeightType { kg, lb }
-
 enum HeightType { cm, feetInc, m }
 
 class HomePage extends StatefulWidget {
@@ -12,8 +11,8 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  WeightType weightType = WeightType.kg;
-  HeightType heightType = HeightType.cm;
+
+
 
   final kgCtrl = TextEditingController();
   final lbCtrl = TextEditingController();
@@ -23,8 +22,54 @@ class _HomePageState extends State<HomePage> {
   final mCtrl = TextEditingController();
 
 
+  // 1 kg = 0.453592 lb
+  double ? lbToKg(){
+    final lb = double.tryParse(lbCtrl.text);
+    if (lb == null || lb <= 0) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Please enter a valid weight in KG'),
+        )
+      );
+    }
+    return lb! * 0.453592;
+  }
+
+
+  // 1 m = 100 cm
+  double ? cmToM() {
+    final cm = double.tryParse(cmCtrl.text);
+    if (cm == null || cm <= 0) {
+      ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Please enter a valid height in CM'),
+          )
+      );
+    }
+    return cm! / 100;
+  }
+
+
+  double ? inchFeetToM(){
+    final feet = double.tryParse(feetCtrl.text);
+    final inch = double.tryParse(inchCtrl.text);
+    if (feet == null || feet <= 0 || inch == null || inch <= 0) {
+      ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Please enter a valid height in INCH/FEET'),
+          )
+      );
+    }
+    double totalFeet = feet!+(inch! / 12);
+    return totalFeet * 0.0254;
+    }
+
+
+
   @override
   Widget build(BuildContext context) {
+    WeightType weightType = WeightType.kg;
+    HeightType heightType = HeightType.cm;
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
