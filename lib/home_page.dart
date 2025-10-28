@@ -320,23 +320,23 @@ class _HomePageState extends State<HomePage> {
                             children: [
                               Text(
                                 bmiResult.isEmpty ? 'Your BMI Result' : bmiResult,
-                                style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
+                                style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold,),
                               ),
                               SizedBox(height: 10),
                               if (bmiValue <= 18.5 && bmiValue >= 5) ...[
                                 Text(
                                   'You are underweight',
-                                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold,color: Colors.red),
                                 ),
                               ] else if (bmiValue >= 18.5 && bmiValue <= 25) ...[
                                 Text(
                                   'You are Healthy',
-                                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold,color: Colors.green),
                                 ),
                               ] else if (bmiValue >= 25 && bmiValue <= 30) ...[
                                 Text(
                                   'You are overweight',
-                                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold,color: Colors.yellow),
                                 ),
                               ],
                             ],
