@@ -182,12 +182,22 @@ class _HomePageState extends State<HomePage> {
               ButtonSegment<WeightType>(value: WeightType.lb, label: Text('LB')),
             ],
             selected: {weightType},
-            onSelectionChanged: (value) => setState(() => weightType = value.first),
+            onSelectionChanged: (value) {
+              setState(() {
+                weightType = value.first;
+              });
+              if (weightType == WeightType.kg) {
+                kgCtrl.clear();
+                lbCtrl.clear();
+              }
+              bmiResult = '';
+            }
           ),
           if (weightType == WeightType.kg) ...[
             SizedBox(height: 10),
             TextField(
               controller:kgCtrl,
+              keyboardType: TextInputType.number,
               decoration: InputDecoration(
                 hintText: 'Weight (KG)',
                 border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
@@ -197,6 +207,7 @@ class _HomePageState extends State<HomePage> {
             SizedBox(height: 10),
             TextField(
               controller: lbCtrl,
+              keyboardType: TextInputType.number,
               decoration: InputDecoration(
                 hintText: 'Weight (LB)',
                 border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
@@ -224,12 +235,24 @@ class _HomePageState extends State<HomePage> {
               ButtonSegment<HeightType>(value: HeightType.m, label: Text('MEETER')),
             ],
             selected: {heightType},
-            onSelectionChanged: (value) => setState(() => heightType = value.first),
+            onSelectionChanged: (value) {
+              setState(() {
+                heightType = value.first;
+              });
+
+              if (heightType == HeightType.cm) {
+                cmCtrl.clear();
+                feetCtrl.clear();
+                inchCtrl.clear();
+              }
+              bmiResult = '';
+            },
           ),
           if (heightType == HeightType.cm) ...[
             SizedBox(height: 10),
             TextField(
               controller: cmCtrl,
+              keyboardType: TextInputType.number,
               decoration: InputDecoration(
                 hintText: 'Height (CM)',
                 border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
@@ -242,6 +265,7 @@ class _HomePageState extends State<HomePage> {
                 Expanded(
                   child: TextField(
                     controller: feetCtrl,
+                    keyboardType: TextInputType.number,
                     decoration: InputDecoration(
                       hintText: 'Height (Feet)',
                       border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
@@ -252,6 +276,7 @@ class _HomePageState extends State<HomePage> {
                 Expanded(
                   child: TextField(
                     controller: inchCtrl,
+                    keyboardType: TextInputType.number,
                     decoration: InputDecoration(
                       hintText: 'Height (INCH)',
                       border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
@@ -264,6 +289,7 @@ class _HomePageState extends State<HomePage> {
             SizedBox(height: 10),
             TextField(
               controller: mCtrl,
+              keyboardType: TextInputType.number,
               decoration: InputDecoration(
                 hintText: 'Height (MEETER)',
                 border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
