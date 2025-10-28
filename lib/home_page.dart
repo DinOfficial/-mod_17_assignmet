@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:syncfusion_flutter_gauges/gauges.dart';
 
 enum WeightType { kg, lb }
+
 enum HeightType { cm, feetInc, m }
 
 class HomePage extends StatefulWidget {
@@ -11,10 +13,8 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-
   WeightType weightType = WeightType.kg;
   HeightType heightType = HeightType.cm;
-
 
   final kgCtrl = TextEditingController();
   final lbCtrl = TextEditingController();
@@ -24,49 +24,37 @@ class _HomePageState extends State<HomePage> {
   final mCtrl = TextEditingController();
 
   String bmiResult = '';
+  double bmiValue = 0.0;
 
   // 1 kg = 0.453592 lb
-  double ? lbToKg(){
-   final kgText = kgCtrl.text;
-   final lbText = lbCtrl.text;
-    if(kgText.isNotEmpty){
+  double? lbToKg() {
+    final kgText = kgCtrl.text;
+    final lbText = lbCtrl.text;
+    if (kgText.isNotEmpty) {
       final kg = double.tryParse(kgText.trim());
-      if(kg == null || kg <= 0){
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text('Please enter a valid weight in KG'),
-          )
-        );
-      return null;
+      if (kg == null || kg <= 0) {
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(SnackBar(content: Text('Please enter a valid weight in KG')));
+        return null;
       }
       return kg;
-    }
-    else if(lbText.isNotEmpty){
+    } else if (lbText.isNotEmpty) {
       final lb = double.tryParse(lbText.trim());
-      if(lb == null || lb <= 0){
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text('Please enter a valid weight in KG'),
-          )
-        );
+      if (lb == null || lb <= 0) {
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(SnackBar(content: Text('Please enter a valid weight in KG')));
         return null;
       }
       return lb * 0.453592;
-    }else{
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text('Please enter a weight'),
-        ),
-      );
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Please enter a weight')));
       return null;
     }
-
   }
 
-
   // 1 m = 100 cm
-
-
 
   double? weightTypeCalculation() {
     final cmText = cmCtrl.text;
@@ -74,53 +62,40 @@ class _HomePageState extends State<HomePage> {
     final inchText = inchCtrl.text;
     final mText = mCtrl.text;
 
-    if(cmText.isNotEmpty){
+    if (cmText.isNotEmpty) {
       final cm = double.tryParse(cmText.trim());
-      if(cm == null || cm <= 0){
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text('Please enter a valid height in CM'),
-          ),
-        );
+      if (cm == null || cm <= 0) {
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(SnackBar(content: Text('Please enter a valid height in CM')));
         return null;
       }
       return cm / 100;
-    }
-    else if (feetText.isNotEmpty || inchText.isNotEmpty) {
+    } else if (feetText.isNotEmpty || inchText.isNotEmpty) {
       final feet = double.tryParse(feetText.trim()) ?? 0.0;
       final inch = double.tryParse(inchText.trim()) ?? 0.0;
       if (feet <= 0 && inch <= 0) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text('Please enter a valid height in Feet/Inch'),
-          ),
-        );
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(SnackBar(content: Text('Please enter a valid height in Feet/Inch')));
         return null;
       }
       double totalFeet = feet + (inch / 12.0);
       // 1 feet = 0.3048 meters
       return totalFeet * 0.3048;
-    }
-    else if (mText.isNotEmpty) {
+    } else if (mText.isNotEmpty) {
       final m = double.tryParse(mText.trim());
       if (m == null || m <= 0) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text('Please enter a valid height in Meter'),
-          ),
-        );
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(SnackBar(content: Text('Please enter a valid height in Meter')));
         return null;
       }
       return m;
     }
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text('Please enter a height'),
-      ),
-    );
+    ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Please enter a height')));
     return null;
   }
-
 
   void calculateBMI() {
     final weight = lbToKg();
@@ -130,11 +105,11 @@ class _HomePageState extends State<HomePage> {
       return;
     }
 
-  final bmi = weight / (height * height);
-  setState(() {
-    bmiResult = 'Your BMI is ${bmi.toStringAsFixed(2)}';
-  });
-
+    final bmi = weight / (height * height);
+    setState(() {
+      bmiValue = bmi;
+      bmiResult = 'Your BMI is ${bmi.toStringAsFixed(2)}';
+    });
   }
 
   @override
@@ -191,12 +166,12 @@ class _HomePageState extends State<HomePage> {
                 lbCtrl.clear();
               }
               bmiResult = '';
-            }
+            },
           ),
           if (weightType == WeightType.kg) ...[
             SizedBox(height: 10),
             TextField(
-              controller:kgCtrl,
+              controller: kgCtrl,
               keyboardType: TextInputType.number,
               decoration: InputDecoration(
                 hintText: 'Weight (KG)',
@@ -272,7 +247,7 @@ class _HomePageState extends State<HomePage> {
                     ),
                   ),
                 ),
-                SizedBox(width: 10,),
+                SizedBox(width: 10),
                 Expanded(
                   child: TextField(
                     controller: inchCtrl,
@@ -296,24 +271,88 @@ class _HomePageState extends State<HomePage> {
               ),
             ),
           ],
-          SizedBox(height: 20,),
+          SizedBox(height: 20),
           ElevatedButton(
             style: ElevatedButton.styleFrom(
-              backgroundColor: Colors.blueGrey,
+              backgroundColor: Colors.blueGrey[300],
               foregroundColor: Colors.white,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(10),
-              )
+              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
             ),
-              onPressed: calculateBMI,
-              child: Text('Show The Result', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold), )
+            onPressed: calculateBMI,
+            child: Text(
+              'Show The Result',
+              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+            ),
           ),
-          SizedBox(height: 20,),
+          SizedBox(height: 20),
           Card(
-            child: Center(
-              child: Text('Result : $bmiResult'),
+            elevation: 5,
+            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+            color: Colors.blueGrey[100],
+            child: Container(
+              padding: EdgeInsets.only(top: 20),
+              height: 300,
+              child: Center(
+                child: SfRadialGauge(
+                  enableLoadingAnimation: true,
+                  animationDuration: 2000,
+                  axes: <RadialAxis>[
+                    RadialAxis(
+                      minimum: 0,
+                      maximum: 40,
+                      pointers: <NeedlePointer>[
+                        NeedlePointer(
+                          needleLength: 0.8,
+                          value: bmiValue,
+                          enableAnimation: true,
+                          needleColor: Colors.blueGrey,
+                        ),
+                      ],
+                      ranges: <GaugeRange>[
+                        GaugeRange(startValue: 0, endValue: 18, color: Colors.red),
+                        GaugeRange(startValue: 18, endValue: 25, color: Colors.green),
+                        GaugeRange(startValue: 25, endValue: 40, color: Colors.yellow),
+                      ],
+                      annotations: <GaugeAnnotation>[
+                        GaugeAnnotation(
+                          widget: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Text(
+                                bmiResult.isEmpty ? 'Your BMI Result' : bmiResult,
+                                style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
+                              ),
+                              SizedBox(height: 10),
+                              if (bmiValue <= 18.5 && bmiValue >= 5) ...[
+                                Text(
+                                  'You are underweight',
+                                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                                ),
+                              ] else if (bmiValue >= 18.5 && bmiValue <= 25) ...[
+                                Text(
+                                  'You are Healthy',
+                                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                                ),
+                              ] else if (bmiValue >= 25 && bmiValue <= 30) ...[
+                                Text(
+                                  'You are overweight',
+                                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                                ),
+                              ],
+                            ],
+                          ),
+                          angle: 90,
+                          positionFactor: 0.3,
+                          horizontalAlignment: GaugeAlignment.center,
+                          verticalAlignment: GaugeAlignment.center,
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
             ),
-          )
+          ),
         ],
       ),
     );
